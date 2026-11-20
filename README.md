@@ -1,84 +1,57 @@
-# WinClicker - Free Auto Clicker for Windows
+# WinClicker 🎨🇧🇷
 
-**WinClicker is a free, open-source auto clicker for Windows 10 and 11.** It's a single 60 KB `.exe` with no installer, no ads and no dependencies - and unlike most auto clickers it can **click in the background inside a specific window** (a Chrome tab, a game, a form) while you keep using your mouse and keyboard for everything else.
+**Auto clicker gratuito e de código aberto para Windows 10 e 11** — fork do [WinClicker](https://github.com/PriyanshuGeTRekT/WinClicker) com tema **[Catppuccin Mocha](https://catppuccin.com)** e interface em **português (pt-BR)**.
 
-[**⬇ Download WinClicker.exe**](../../releases/latest) · [Website](https://priyanshugetrekt.github.io/WinClicker/) · [Report a bug](../../issues)
+Um único `.exe` de ~60 KB: sem instalador, sem anúncios, sem dependências. E, diferente da maioria dos auto clickers, ele consegue **clicar em segundo plano dentro de uma janela específica** (uma aba do Chrome, um jogo, um formulário) enquanto você continua usando o mouse e o teclado normalmente.
 
-![WinClicker auto clicker for Windows - main window with target, interval and hotkey settings](docs/main.png)
+[**⬇ Baixar WinClicker.exe**](../../releases/latest)
 
-## Features
+## Recursos
 
-- **Background auto clicking in any window.** Pick a spot inside a window and WinClicker posts the clicks straight to it. Your real mouse pointer never moves, so you can browse, type and work in other apps at the same time. The target window can sit behind other windows (just not minimized).
-- **Clicks a fixed screen location or follows your cursor** - the classic auto clicker modes, with an on-screen picker to choose the exact pixel.
-- **Only your keyboard stops it.** Moving the mouse never interrupts a run. Press your stop hotkey - or, optionally, *any* key - and it stops instantly.
-- **Custom global hotkeys** to start and stop (default **F6** / **F7**). Click a hotkey button, press the key you want, including Ctrl / Alt / Shift combinations. The hotkeys are swallowed so the app you're clicking in never sees them.
-- **Adjustable click interval** from 1 ms upward, with a dedicated high-resolution timing thread - thousands of clicks per minute if you want them.
-- **Left, right or middle button; single or double click.**
-- **Start/stop popup notifications** with the click count and run time, so you always know what it's doing.
-- **Beautiful dark UI** - frameless, rounded, DPI-aware on every monitor.
-- **Portable and tiny.** One `.exe`, no installer, no runtime to download. Settings live in `%APPDATA%\WinClicker\settings.ini`.
-- **Open source (MIT)** - the entire app is one C# file and two XAML files.
+- **Clique automático em segundo plano em qualquer janela.** Marque um ponto dentro de uma janela e o WinClicker envia os cliques direto para ela. O seu ponteiro real nunca se mexe, então você pode navegar, digitar e trabalhar em outros apps ao mesmo tempo. A janela pode ficar atrás das outras (só não pode ser minimizada).
+- **Clica num local fixo da tela ou segue o cursor** — os modos clássicos, com um seletor na tela para escolher o pixel exato.
+- **Só o seu teclado para.** Mexer o mouse nunca interrompe uma execução. Pressione o atalho de parar — ou, opcionalmente, *qualquer* tecla — e ela para na hora.
+- **Atalhos globais personalizáveis** para iniciar e parar (padrão **F6** / **F7**). Clique no botão do atalho e pressione a tecla que quiser, inclusive combinações com Ctrl / Alt / Shift.
+- **Intervalo ajustável** a partir de 1 ms, com uma thread de tempo dedicada — milhares de cliques por minuto se você quiser.
+- **Botão esquerdo, direito ou do meio; clique simples ou duplo.**
+- **Notificações de início/parada** com a contagem de cliques e o tempo de execução.
+- **Tema Catppuccin Mocha** — janela sem bordas, cantos arredondados, ciente de DPI em cada monitor.
+- **Portátil e minúsculo.** Um `.exe`, sem instalador, sem runtime para baixar. As configurações ficam em `%APPDATA%\WinClicker\settings.ini`.
+- **Código aberto (MIT)** — o app inteiro é um arquivo C# e dois XAML.
 
-![WinClicker start/stop notification popup](docs/toast.png)
+## Como usar
 
-## Download and install
-
-1. Download `WinClicker.exe` from the [latest release](../../releases/latest).
-2. Run it. There's nothing to install.
-
-Windows SmartScreen may warn about an unknown publisher the first time, because the exe isn't code-signed. Click *More info → Run anyway*. You can also build it yourself from source in a few seconds (below) if you'd rather not run a downloaded binary.
-
-**Build from source:** clone the repo and run `build.bat`. It uses `csc.exe` from the .NET Framework that's already on every Windows 10/11 machine - no Visual Studio needed.
-
-## How to use WinClicker
-
-| Target mode | What happens | Stops on |
+| Modo | O que acontece | Para com |
 |---|---|---|
-| **Fixed location** | Moves the pointer to X/Y and clicks there. Choose the spot with *Pick on screen*. | Stop hotkey, or any key (switchable) |
-| **Follow cursor** | Clicks wherever your pointer currently is. | Stop hotkey, or any key (switchable) |
-| **In a window** | Sends clicks directly to one window, mouse-free. The window may be behind others, but not minimized. | Stop hotkey only - your typing goes to your other apps |
+| **Local fixo** | Move o ponteiro até X/Y e clica lá. Escolha o ponto com *Escolher na tela*. | Atalho de parar, ou qualquer tecla (opcional) |
+| **Seguir o cursor** | Clica onde o seu ponteiro estiver no momento. | Atalho de parar, ou qualquer tecla (opcional) |
+| **Numa janela** | Envia cliques direto para uma janela, sem tocar no mouse. A janela pode ficar atrás, mas não minimizada. | Só o atalho de parar — a sua digitação vai para os outros apps |
 
-1. Choose a target mode and (for the first and third) click **Pick on screen** to choose the exact spot.
-2. Set the interval in milliseconds, the mouse button and single/double click.
-3. Press **F6** (or your own hotkey) to start, **F7** to stop. A popup confirms each.
+1. Escolha o modo e (no primeiro e no terceiro) clique em **Escolher na tela** para marcar o ponto exato.
+2. Defina o intervalo em milissegundos, o botão do mouse e simples/duplo.
+3. Pressione **F6** (ou o seu atalho) para iniciar e **F7** para parar. Um popup confirma cada um.
 
-## FAQ
+## Download
 
-**Does WinClicker work in the background / while I use other apps?**
-Yes - that's the main reason it exists. Use the *In a window* mode. Clicks are delivered to that window directly, so your mouse and keyboard stay free for everything else.
+Baixe o `WinClicker.exe` na página de [Releases](../../releases/latest) e rode — não há nada para instalar.
 
-**Does it work with Chrome, browser games and web pages?**
-Yes. Background mode is verified against Google Chrome: with the Chrome window covered by another app, 25 posted clicks were all received by the page.
+O SmartScreen do Windows pode avisar sobre um editor desconhecido na primeira execução, porque o exe não é assinado digitalmente (assinatura custa dinheiro). Clique em *Mais informações → Executar assim mesmo*. Ou compile você mesmo (abaixo) se preferir não rodar um binário baixado.
 
-**Does it work for Roblox, Minecraft and other games?**
-Fixed-location and follow-cursor modes work with any game, since they use the same input path as a real mouse. Background mode works with games that accept standard window mouse messages; some games that read raw hardware input ignore synthetic clicks - use Fixed location for those.
+## Compilar
 
-**Can I set the click speed / clicks per second?**
-Yes. The interval is in milliseconds, minimum 1 ms (up to ~1000 clicks per second). 100 ms = 10 CPS.
+**No Windows:** clone o repo e rode `build.bat`. Ele usa o compilador C# que já vem em todo Windows 10/11 — nada para instalar.
 
-**How do I stop it?**
-Press the stop hotkey (default F7). In Fixed and Follow-cursor modes you can also turn on *Any key press stops clicking*. Moving the mouse never stops it.
+**No Linux (compila o exe para Windows):** `dotnet build -c Release` → o exe sai em `bin/Release/net48/WinClicker.exe`. (Requer o [.NET SDK](https://dotnet.microsoft.com/download); os assemblies de referência do .NET Framework 4.8 vêm do NuGet.)
 
-**Is it safe? Is it a virus?**
-It's open source - read [App.cs](App.cs), it's one file - and you can compile it yourself with `build.bat`. The SmartScreen warning only means the exe isn't code-signed.
+## Segurança
 
-**Does it need admin rights?**
-No. But apps that run as administrator ignore clicks from a non-elevated WinClicker; run WinClicker as administrator too in that case.
+- Não acessa a internet: nenhuma telemetria, nenhum download, nada é enviado.
+- Só escreve um arquivo: as suas configurações em `%APPDATA%\WinClicker\settings.ini`.
+- Não pede direitos de administrador.
+- Usa APIs legítimas do Windows (`SendInput` e `PostMessage` para os cliques, um hook de teclado apenas para detectar os atalhos) — é a natureza de um auto clicker, e tudo está visível no código-fonte.
 
-**Does it work on Windows 10 and Windows 11?**
-Yes, both, 64-bit. It needs .NET Framework 4.8, which ships with Windows 10 (1903+) and Windows 11.
+## Créditos e licença
 
-## How it works
-
-- Fixed and cursor modes use `SendInput`, the same path real hardware takes.
-- Window mode walks the target's child windows (`ChildWindowFromPointEx`) and posts `WM_MOUSEMOVE` + `WM_xBUTTONDOWN/UP` with `PostMessage`, so it never blocks on a busy target.
-- Hotkeys and "any key stops it" come from a low-level keyboard hook (`WH_KEYBOARD_LL`); auto-repeat is filtered so a held key counts once.
-- Timing uses a 1 ms multimedia timer period and a stopwatch-scheduled loop on its own thread, so UI work never delays a click.
-
-## License
-
-[MIT](LICENSE). Free for personal and commercial use.
-
----
-
-*Keywords: auto clicker, autoclicker, Windows auto clicker, free auto clicker, background auto clicker, auto clicker that works in background, auto clicker with hotkeys, mouse clicker, click automation, GS Auto Clicker alternative, OP Auto Clicker alternative, open source auto clicker.*
+- Fork de [PriyanshuGeTRekT/WinClicker](https://github.com/PriyanshuGeTRekT/WinClicker), de [PriyanshuGeTRekT](https://github.com/PriyanshuGeTRekT) — obrigado pelo app original! 🙏
+- Licença [MIT](LICENSE) — livre para uso pessoal e comercial.
+- Paleta: [Catppuccin](https://github.com/catppuccin/catppuccin) (Mocha), também MIT.

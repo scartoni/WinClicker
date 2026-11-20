@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -107,7 +107,7 @@ static class Native
             if (app.Length > 0) app = char.ToUpper(app[0]) + app.Substring(1);
         }
         catch (Exception) { }
-        if (title.Length == 0) return app.Length > 0 ? app : "Untitled window";
+        if (title.Length == 0) return app.Length > 0 ? app : "Janela sem título";
         if (app.Length == 0 || title.IndexOf(app, StringComparison.OrdinalIgnoreCase) >= 0) return title;
         return app + " - " + title;
     }
@@ -234,8 +234,8 @@ sealed class ClickRun
     // cursor is never touched and the window needn't be in front.
     bool ClickWindow()
     {
-        if (!Native.IsWindow(Root)) { Error = "The target window was closed"; return false; }
-        if (Native.IsIconic(Root)) { Error = "The target window was minimized"; return false; }
+        if (!Native.IsWindow(Root)) { Error = "A janela de destino foi fechada"; return false; }
+        if (Native.IsIconic(Root)) { Error = "A janela de destino foi minimizada"; return false; }
 
         Native.RECT rc;
         Native.GetWindowRect(Root, out rc);
@@ -283,8 +283,8 @@ sealed class Controller
     IntPtr targetWin;
     int targetX, targetY;
 
-    static readonly Brush Green = Frozen(0x3D, 0xDC, 0x97), Red = Frozen(0xFF, 0x5C, 0x7A),
-                          Amber = Frozen(0xF5, 0xA6, 0x23), Muted = Frozen(0x8A, 0x90, 0xA6), Idle = Frozen(0x5A, 0x60, 0x78);
+    static readonly Brush Green = Frozen(0xA6, 0xE3, 0xA1), Red = Frozen(0xF3, 0x8B, 0xA8),
+                          Amber = Frozen(0xF9, 0xE2, 0xAF), Muted = Frozen(0xA6, 0xAD, 0xC8), Idle = Frozen(0x58, 0x5B, 0x70);
 
     Hotkey startHk = new Hotkey(0x75, 0), stopHk = new Hotkey(0x76, 0);   // F6 / F7
     Button recording;
@@ -347,7 +347,7 @@ sealed class Controller
         uiTimer.Tick += delegate
         {
             ClickRun r = run;
-            if (r != null && r.Error != null) { Stop(false); ShowToast("warn", "Clicking stopped", r.Error); return; }
+            if (r != null && r.Error != null) { Stop(false); ShowToast("warn", "Cliques parados", r.Error); return; }
             ShowProgress(r);
         };
 
@@ -359,7 +359,7 @@ sealed class Controller
             if (shotDir != null) { TakeShots(); return; }
             hookProc = HookCallback;
             hook = Native.SetWindowsHookEx(Native.WH_KEYBOARD_LL, hookProc, Native.GetModuleHandle(null), 0);
-            if (hook == IntPtr.Zero) ShowToast("warn", "Hotkeys unavailable", "Could not install the keyboard hook");
+            if (hook == IntPtr.Zero) ShowToast("warn", "Atalhos indisponíveis", "Não foi possível instalar o hook de teclado");
         };
         Win.Closed += delegate
         {
@@ -400,11 +400,11 @@ sealed class Controller
         var dv = new DrawingVisual();
         using (DrawingContext dc = dv.RenderOpen())
         {
-            var g = new LinearGradientBrush(Color.FromRgb(0x7C, 0x5C, 0xFF), Color.FromRgb(0x4C, 0xC2, 0xFF), 45);
+            var g = new LinearGradientBrush(Color.FromRgb(0xCB, 0xA6, 0xF7), Color.FromRgb(0x89, 0xB4, 0xFA), 45);
             dc.DrawRoundedRectangle(g, null, new Rect(0, 0, 64, 64), 16, 16);
             dc.PushTransform(new TranslateTransform(21, 14));
             dc.PushTransform(new ScaleTransform(2.2, 2.2));
-            dc.DrawGeometry(Brushes.White, null, Geometry.Parse("M0,0 L0,14 L4,10.5 L6.5,16 L8.5,15 L6,9.8 L11,9.8 Z"));
+            dc.DrawGeometry(Frozen(0x11, 0x11, 0x1B), null, Geometry.Parse("M0,0 L0,14 L4,10.5 L6.5,16 L8.5,15 L6,9.8 L11,9.8 Z"));
         }
         var bmp = new RenderTargetBitmap(64, 64, 96, 96, PixelFormats.Pbgra32);
         bmp.Render(dv);
@@ -477,9 +477,9 @@ sealed class Controller
         bool win = m == ClickMode.Window;
         anyKey.IsEnabled = !win;
         anyKey.Opacity = win ? 0.45 : 1;
-        anyKeyNote.Text = win ? "Off in window mode - typing goes to other apps" : "Off = only the stop hotkey stops it";
-        footerNote.Text = win ? "Your mouse and keyboard stay free while it clicks in the background."
-                              : "Moving the mouse never interrupts it - only your keyboard does.";
+        anyKeyNote.Text = win ? "Desligado no modo janela — o que você digita vai para os outros apps" : "Desligado = só o atalho de parar interrompe";
+        footerNote.Text = win ? "Seu mouse e seu teclado ficam livres enquanto ele clica em segundo plano."
+                              : "Mexer o mouse nunca interrompe — só o teclado interrompe.";
         UpdateWindowLabel();
     }
 
@@ -487,7 +487,7 @@ sealed class Controller
     {
         bool ok = targetWin != IntPtr.Zero && Native.IsWindow(targetWin);
         if (!ok && targetWin != IntPtr.Zero) targetWin = IntPtr.Zero;
-        windowName.Text = ok ? Native.Describe(targetWin) : "No window picked yet";
+        windowName.Text = ok ? Native.Describe(targetWin) : "Nenhuma janela escolhida";
         windowName.Foreground = ok ? (Brush)Win.FindResource("Fg") : Muted;
         windowPos.Text = ok ? "@ " + targetX + ", " + targetY : "";
         windowDot.Background = ok ? Green : Idle;
@@ -503,7 +503,7 @@ sealed class Controller
     void UpdateRunningUi()
     {
         bool on = run != null;
-        statusText.Text = on ? "CLICKING" : "READY";
+        statusText.Text = on ? "CLICANDO" : "PRONTO";
         statusText.Foreground = on ? Green : Muted;
         statusDot.Fill = on ? Green : Idle;
         if (on)
@@ -511,7 +511,7 @@ sealed class Controller
                 new DoubleAnimation(1, 0.25, TimeSpan.FromSeconds(0.55)) { AutoReverse = true, RepeatBehavior = RepeatBehavior.Forever });
         else
             statusDot.BeginAnimation(UIElement.OpacityProperty, null);
-        mainBtnText.Text = on ? "Stop" : "Start";
+        mainBtnText.Text = on ? "Parar" : "Iniciar";
         mainBtn.Background = (Brush)Win.FindResource(on ? "StopBrush" : "Accent");
         settingsPanel.IsEnabled = !on;
         settingsPanel.Opacity = on ? 0.5 : 1;
@@ -528,7 +528,7 @@ sealed class Controller
     {
         if (r == null) return;
         countText.Text = Interlocked.Read(ref r.Count).ToString("N0");
-        subText.Text = "clicks  ·  " + Elapsed(r);
+        subText.Text = "cliques  ·  " + Elapsed(r);
     }
 
     // ---------- start / stop ----------
@@ -541,13 +541,13 @@ sealed class Controller
         var r = new ClickRun();
         if (!int.TryParse(intervalBox.Text.Trim(), out r.Interval) || r.Interval < 1)
         {
-            ShowToast("warn", "Invalid interval", "Enter a delay of 1 ms or more");
+            ShowToast("warn", "Intervalo inválido", "Digite um intervalo de 1 ms ou mais");
             return;
         }
         r.Mode = CurrentMode();
         if (r.Mode == ClickMode.Fixed && (!int.TryParse(xBox.Text.Trim(), out r.X) || !int.TryParse(yBox.Text.Trim(), out r.Y)))
         {
-            ShowToast("warn", "No target location", "Use “Pick on screen” to choose where to click");
+            ShowToast("warn", "Nenhum local definido", "Use “Escolher na tela” para definir onde clicar");
             return;
         }
         if (r.Mode == ClickMode.Window)
@@ -555,12 +555,12 @@ sealed class Controller
             UpdateWindowLabel();
             if (targetWin == IntPtr.Zero)
             {
-                ShowToast("warn", "No window picked", "Use “Pick on screen” to choose a spot inside a window");
+                ShowToast("warn", "Nenhuma janela escolhida", "Use “Escolher na tela” para marcar um ponto dentro de uma janela");
                 return;
             }
             if (Native.IsIconic(targetWin))
             {
-                ShowToast("warn", "Window is minimized", "Restore the target window first - it may sit behind others");
+                ShowToast("warn", "Janela minimizada", "Restaure a janela de destino primeiro — ela pode estar atrás das outras");
                 return;
             }
             r.Root = targetWin; r.X = targetX; r.Y = targetY;
@@ -576,8 +576,8 @@ sealed class Controller
         UpdateRunningUi();
         SaveSettings();
         bool anyStops = r.Mode != ClickMode.Window && anyKey.IsChecked == true;
-        ShowToast("start", r.Mode == ClickMode.Window ? "Clicking in " + Native.Describe(r.Root) : "Clicking started",
-            "Press " + stopHk + (anyStops ? " or any key" : "") + " to stop");
+        ShowToast("start", r.Mode == ClickMode.Window ? "Clicando em " + Native.Describe(r.Root) : "Clique iniciado",
+            "Pressione " + stopHk + (anyStops ? " ou qualquer tecla" : "") + " para parar");
     }
 
     void Stop() { Stop(true); }
@@ -593,7 +593,7 @@ sealed class Controller
         ShowProgress(r);
         UpdateRunningUi();
         if (notify)
-            ShowToast("stop", "Clicking stopped", Interlocked.Read(ref r.Count).ToString("N0") + " clicks in " + Elapsed(r));
+            ShowToast("stop", "Cliques parados", Interlocked.Read(ref r.Count).ToString("N0") + " cliques em " + Elapsed(r));
     }
 
     // ---------- keyboard hook ----------
@@ -669,7 +669,7 @@ sealed class Controller
         if (recording != null) EndRecording(null);
         recording = b;
         b.Tag = "rec";
-        b.Content = "Press a key…";
+        b.Content = "Pressione uma tecla…";
     }
 
     void EndRecording(Hotkey hk)
@@ -692,11 +692,11 @@ sealed class Controller
     {
         if (recording != null) EndRecording(null);
 
-        var coord = new TextBlock { FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = Brushes.White };
-        var winLine = new TextBlock { FontSize = 12, Foreground = Frozen(0xB9, 0xA8, 0xFF), FontWeight = FontWeights.SemiBold,
+        var coord = new TextBlock { FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = Frozen(0xCD, 0xD6, 0xF4) };
+        var winLine = new TextBlock { FontSize = 12, Foreground = Frozen(0xB4, 0xBE, 0xFE), FontWeight = FontWeights.SemiBold,
                                       MaxWidth = 360, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 3, 0, 0),
                                       Visibility = pickWindow ? Visibility.Visible : Visibility.Collapsed };
-        var hint = new TextBlock { Text = pickWindow ? "Click a spot inside the window to target  ·  Esc to cancel" : "Click to set target  ·  Esc to cancel",
+        var hint = new TextBlock { Text = pickWindow ? "Clique em um ponto dentro da janela para mirar  ·  Esc para cancelar" : "Clique para definir o alvo  ·  Esc para cancelar",
                                    FontSize = 11.5, Foreground = Muted, Margin = new Thickness(0, 2, 0, 0) };
         var sp = new StackPanel();
         sp.Children.Add(coord);
@@ -704,7 +704,7 @@ sealed class Controller
         sp.Children.Add(hint);
         var label = new Border
         {
-            Background = Frozen(0x17, 0x1A, 0x23), BorderBrush = Frozen(0x7C, 0x5C, 0xFF), BorderThickness = new Thickness(1),
+            Background = Frozen(0x18, 0x18, 0x25), BorderBrush = Frozen(0xCB, 0xA6, 0xF7), BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(10), Padding = new Thickness(12, 8, 12, 8), Child = sp, IsHitTestVisible = false
         };
         var canvas = new Canvas();
@@ -729,7 +729,7 @@ sealed class Controller
             if (pickWindow && overlay != IntPtr.Zero)
             {
                 hoverWin = Native.TopLevelAt(c, overlay);
-                winLine.Text = hoverWin == IntPtr.Zero ? "No window here" : Native.Describe(hoverWin);
+                winLine.Text = hoverWin == IntPtr.Zero ? "Nenhuma janela aqui" : Native.Describe(hoverWin);
             }
             label.UpdateLayout();
             double lx = p.X + 20, ly = p.Y + 20;
@@ -852,7 +852,7 @@ sealed class Controller
         var dv = new DrawingVisual();
         using (DrawingContext dc = dv.RenderOpen())
         {
-            dc.DrawRectangle(Frozen(0x3A, 0x40, 0x50), null, new Rect(0, 0, w, h));
+            dc.DrawRectangle(Frozen(0x31, 0x32, 0x44), null, new Rect(0, 0, w, h));
             dc.DrawRectangle(new VisualBrush(el) { Stretch = Stretch.None }, null, new Rect(pad, pad, el.ActualWidth, el.ActualHeight));
         }
         var bmp = new RenderTargetBitmap((int)(w * scale), (int)(h * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
@@ -865,7 +865,7 @@ sealed class Controller
     void TakeShots()
     {
         var steps = new Queue<Action>();
-        steps.Enqueue(delegate { Shot((FrameworkElement)Win.Content, Path.Combine(shotDir, "main.png")); ShowToast("start", "Clicking started", "Press F7 or any key to stop"); });
+        steps.Enqueue(delegate { Shot((FrameworkElement)Win.Content, Path.Combine(shotDir, "main.png")); ShowToast("start", "Clique iniciado", "Pressione F7 ou qualquer tecla para parar"); });
         steps.Enqueue(delegate { Shot(toastRoot, Path.Combine(shotDir, "toast.png")); });
         steps.Enqueue(delegate
         {

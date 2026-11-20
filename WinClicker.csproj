@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>WinClicker</AssemblyName>
+    <RootNamespace>WinClicker</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <!-- App.cs define os próprios atributos de assembly -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- idem para o TargetFrameworkAttribute (já está no App.cs) -->
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <!-- itens explícitos abaixo; nada de globbing automático -->
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <!-- mesmo manifest do build.bat: asInvoker + DPI-aware, sem pedir admin -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="App.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+
+  <!-- embutidos como recursos de manifesto, como o build.bat faz
+       (o App.cs carrega via GetManifestResourceStream("Main.xaml")) -->
+  <ItemGroup>
+    <EmbeddedResource Include="Main.xaml" LogicalName="Main.xaml" />
+    <EmbeddedResource Include="Toast.xaml" LogicalName="Toast.xaml" />
+  </ItemGroup>
+
+  <!-- permite compilar .NET Framework 4.8 a partir do Linux -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

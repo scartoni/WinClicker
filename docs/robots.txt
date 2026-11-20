@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://priyanshugetrekt.github.io/WinClicker/sitemap.xml
