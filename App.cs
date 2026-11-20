@@ -16,7 +16,7 @@ using System.Windows.Threading;
 
 [assembly: System.Reflection.AssemblyTitle("WinClicker")]
 [assembly: System.Reflection.AssemblyProduct("WinClicker")]
-[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.8", FrameworkDisplayName = ".NET Framework 4.8")]
 
 static class Native
@@ -107,7 +107,7 @@ static class Native
             if (app.Length > 0) app = char.ToUpper(app[0]) + app.Substring(1);
         }
         catch (Exception) { }
-        if (title.Length == 0) return app.Length > 0 ? app : "Janela sem título";
+        if (title.Length == 0) return app.Length > 0 ? app : Loc.T("untitled");
         if (app.Length == 0 || title.IndexOf(app, StringComparison.OrdinalIgnoreCase) >= 0) return title;
         return app + " - " + title;
     }
@@ -144,7 +144,7 @@ sealed class Hotkey
             case 0x0D: return "Enter";
             case 0x14: return "CapsLock";
             case 0x1B: return "Esc";
-            case 0x20: return "Space";
+            case 0x20: return Loc.T("space");
             case 0x21: return "PageUp";
             case 0x22: return "PageDown";
             case 0x2C: return "PrintScreen";
@@ -176,6 +176,91 @@ sealed class Hotkey
 }
 
 enum ClickMode { Fixed, Cursor, Window }
+
+static class Loc
+{
+    public static string Lang = "en";
+
+    static readonly Dictionary<string, string> En = new Dictionary<string, string>
+    {
+        {"minimize", "Minimize"}, {"close", "Close"}, {"langTooltip", "Switch language"},
+        {"target", "TARGET"}, {"click", "CLICK"}, {"hotkeys", "HOTKEYS"},
+        {"modeFixed", "Fixed location"}, {"modeCursor", "Follow cursor"}, {"modeWindow", "In a window"},
+        {"pickScreen", "Pick on screen"},
+        {"cursorNote", "Clicks wherever your pointer currently is."},
+        {"windowNote", "Clicks are sent straight to that window, so your mouse stays free and you can use other apps meanwhile. The window can be behind others, but not minimized. Only the stop hotkey stops this mode."},
+        {"intervalLabel", "Interval between clicks"},
+        {"left", "Left"}, {"right", "Right"}, {"middle", "Middle"}, {"single", "Single"}, {"double", "Double"},
+        {"start", "Start"}, {"stop", "Stop"}, {"hotkeyTip", "Click, then press the new hotkey"},
+        {"anyKey", "Any key press stops clicking"}, {"clicksRun", "clicks this run"},
+        {"ready", "READY"}, {"clicking", "CLICKING"},
+        {"anyNoteAny", "Off = only the stop hotkey stops it"},
+        {"anyNoteWin", "Off in window mode - typing goes to other apps"},
+        {"footerOther", "Moving the mouse never interrupts it - only your keyboard does."},
+        {"footerWin", "Your mouse and keyboard stay free while it clicks in the background."},
+        {"noWindowYet", "No window picked yet"}, {"untitled", "Untitled window"},
+        {"clicksSep", "clicks  ·  "},
+        {"invalidInterval", "Invalid interval"}, {"invalidIntervalMsg", "Enter a delay of 1 ms or more"},
+        {"noTargetLoc", "No target location"}, {"noTargetLocMsg", "Use “Pick on screen” to choose where to click"},
+        {"noWindowPick", "No window picked"}, {"noWindowPickMsg", "Use “Pick on screen” to choose a spot inside a window"},
+        {"minimized", "Window is minimized"}, {"minimizedMsg", "Restore the target window first - it may sit behind others"},
+        {"clickingIn", "Clicking in "}, {"started", "Clicking started"},
+        {"press", "Press "}, {"orAny", " or any key"}, {"toStop", " to stop"},
+        {"stopped", "Clicking stopped"}, {"clicksIn", " clicks in "},
+        {"winClosed", "The target window was closed"}, {"winMinimized", "The target window was minimized"},
+        {"hotkeysUnavail", "Hotkeys unavailable"}, {"hotkeysUnavailMsg", "Could not install the keyboard hook"},
+        {"pressAKey", "Press a key…"},
+        {"pickWinHint", "Click a spot inside the window to target  ·  Esc to cancel"},
+        {"pickPointHint", "Click to set target  ·  Esc to cancel"},
+        {"noWindowHere", "No window here"}, {"f7Demo", "Press F7 or any key to stop"},
+        {"toastTitle", "WinClicker notification"}, {"space", "Space"},
+    };
+
+    static readonly Dictionary<string, string> Pt = new Dictionary<string, string>
+    {
+        {"minimize", "Minimizar"}, {"close", "Fechar"}, {"langTooltip", "Mudar idioma"},
+        {"target", "ALVO"}, {"click", "CLIQUE"}, {"hotkeys", "ATALHOS"},
+        {"modeFixed", "Local fixo"}, {"modeCursor", "Seguir o cursor"}, {"modeWindow", "Numa janela"},
+        {"pickScreen", "Escolher na tela"},
+        {"cursorNote", "Clica onde o seu ponteiro estiver no momento."},
+        {"windowNote", "Os cliques são enviados direto para essa janela, então o seu mouse fica livre e você pode usar outros aplicativos enquanto isso. A janela pode ficar atrás das outras, mas não pode ser minimizada. Neste modo, apenas o atalho de parar interrompe."},
+        {"intervalLabel", "Intervalo entre cliques"},
+        {"left", "Esquerdo"}, {"right", "Direito"}, {"middle", "Meio"}, {"single", "Simples"}, {"double", "Duplo"},
+        {"start", "Iniciar"}, {"stop", "Parar"}, {"hotkeyTip", "Clique e depois pressione o novo atalho"},
+        {"anyKey", "Parar com qualquer tecla"}, {"clicksRun", "cliques nesta execução"},
+        {"ready", "PRONTO"}, {"clicking", "CLICANDO"},
+        {"anyNoteAny", "Desligado = só o atalho de parar interrompe"},
+        {"anyNoteWin", "Desligado no modo janela — o que você digita vai para os outros apps"},
+        {"footerOther", "Mexer o mouse nunca interrompe — só o teclado interrompe."},
+        {"footerWin", "Seu mouse e seu teclado ficam livres enquanto ele clica em segundo plano."},
+        {"noWindowYet", "Nenhuma janela escolhida"}, {"untitled", "Janela sem título"},
+        {"clicksSep", "cliques  ·  "},
+        {"invalidInterval", "Intervalo inválido"}, {"invalidIntervalMsg", "Digite um intervalo de 1 ms ou mais"},
+        {"noTargetLoc", "Nenhum local definido"}, {"noTargetLocMsg", "Use “Escolher na tela” para definir onde clicar"},
+        {"noWindowPick", "Nenhuma janela escolhida"}, {"noWindowPickMsg", "Use “Escolher na tela” para marcar um ponto dentro de uma janela"},
+        {"minimized", "Janela minimizada"}, {"minimizedMsg", "Restaure a janela de destino primeiro — ela pode estar atrás das outras"},
+        {"clickingIn", "Clicando em "}, {"started", "Clique iniciado"},
+        {"press", "Pressione "}, {"orAny", " ou qualquer tecla"}, {"toStop", " para parar"},
+        {"stopped", "Cliques parados"}, {"clicksIn", " cliques em "},
+        {"winClosed", "A janela de destino foi fechada"}, {"winMinimized", "A janela de destino foi minimizada"},
+        {"hotkeysUnavail", "Atalhos indisponíveis"}, {"hotkeysUnavailMsg", "Não foi possível instalar o hook de teclado"},
+        {"pressAKey", "Pressione uma tecla…"},
+        {"pickWinHint", "Clique em um ponto dentro da janela para mirar  ·  Esc para cancelar"},
+        {"pickPointHint", "Clique para definir o alvo  ·  Esc para cancelar"},
+        {"noWindowHere", "Nenhuma janela aqui"}, {"f7Demo", "Pressione F7 ou qualquer tecla para parar"},
+        {"toastTitle", "Notificação do WinClicker"}, {"space", "Espaço"},
+    };
+
+    public static string T(string k)
+    {
+        string v;
+        var d = Lang == "pt" ? Pt : En;
+        if (d.TryGetValue(k, out v)) return v;
+        if (En.TryGetValue(k, out v)) return v;
+        return k;
+    }
+}
+
 
 // One clicking session; runs on its own thread until StopEvent is set.
 sealed class ClickRun
@@ -234,8 +319,8 @@ sealed class ClickRun
     // cursor is never touched and the window needn't be in front.
     bool ClickWindow()
     {
-        if (!Native.IsWindow(Root)) { Error = "A janela de destino foi fechada"; return false; }
-        if (Native.IsIconic(Root)) { Error = "A janela de destino foi minimizada"; return false; }
+        if (!Native.IsWindow(Root)) { Error = Loc.T("winClosed"); return false; }
+        if (Native.IsIconic(Root)) { Error = Loc.T("winMinimized"); return false; }
 
         Native.RECT rc;
         Native.GetWindowRect(Root, out rc);
@@ -277,7 +362,9 @@ sealed class Controller
     readonly TextBlock statusText, countText, subText, mainBtnText, mainBtnHint, windowName, windowPos, anyKeyNote, footerNote;
     readonly System.Windows.Shapes.Ellipse statusDot;
     readonly Border windowDot;
-    readonly FrameworkElement settingsPanel, fixedPanel, cursorNote, windowPanel;
+    readonly FrameworkElement settingsPanel, fixedPanel, windowPanel;
+    readonly TextBlock targetHead, clickHead, hotkeysHead, pickBtnText, pickWinBtnText, intervalLabel, startLabel, stopLabel, anyKeyText, windowNote, cursorNote;
+    readonly Button langBtn;
 
     // Window mode target (not persisted: window handles don't survive a restart)
     IntPtr targetWin;
@@ -321,7 +408,12 @@ sealed class Controller
         mainBtnText = Find<TextBlock>("MainBtnText"); mainBtnHint = Find<TextBlock>("MainBtnHint");
         statusDot = Find<System.Windows.Shapes.Ellipse>("StatusDot");
         settingsPanel = Find<FrameworkElement>("SettingsPanel");
-        fixedPanel = Find<FrameworkElement>("FixedPanel"); cursorNote = Find<FrameworkElement>("CursorNote");
+        fixedPanel = Find<FrameworkElement>("FixedPanel"); cursorNote = Find<TextBlock>("CursorNote");
+        targetHead = Find<TextBlock>("TargetHead"); clickHead = Find<TextBlock>("ClickHead"); hotkeysHead = Find<TextBlock>("HotkeysHead");
+        pickBtnText = Find<TextBlock>("PickBtnText"); pickWinBtnText = Find<TextBlock>("PickWinBtnText");
+        intervalLabel = Find<TextBlock>("IntervalLabel"); windowNote = Find<TextBlock>("WindowNote");
+        startLabel = Find<TextBlock>("StartLabel"); stopLabel = Find<TextBlock>("StopLabel");
+        anyKeyText = Find<TextBlock>("AnyKeyText"); langBtn = Find<Button>("LangBtn");
 
         settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinClicker", "settings.ini");
         if (shotDir == null) LoadSettings();
@@ -332,6 +424,7 @@ sealed class Controller
         Find<FrameworkElement>("TitleBar").MouseLeftButtonDown += delegate { Win.DragMove(); };
         Find<Button>("MinBtn").Click += delegate { Win.WindowState = WindowState.Minimized; };
         Find<Button>("CloseBtn").Click += delegate { Win.Close(); };
+        langBtn.Click += delegate { Loc.Lang = Loc.Lang == "pt" ? "en" : "pt"; SaveSettings(); ApplyLanguage(); };
         Find<Button>("PickBtn").Click += delegate { Pick(false); };
         Find<Button>("PickWinBtn").Click += delegate { Pick(true); };
         mainBtn.Click += delegate { if (run != null) Stop(); else Start(); };
@@ -347,10 +440,11 @@ sealed class Controller
         uiTimer.Tick += delegate
         {
             ClickRun r = run;
-            if (r != null && r.Error != null) { Stop(false); ShowToast("warn", "Cliques parados", r.Error); return; }
+            if (r != null && r.Error != null) { Stop(false); ShowToast("warn", Loc.T("stopped"), r.Error); return; }
             ShowProgress(r);
         };
 
+        ApplyLanguage();
         UpdateMode();
         UpdateHotkeyTexts();
 
@@ -359,7 +453,7 @@ sealed class Controller
             if (shotDir != null) { TakeShots(); return; }
             hookProc = HookCallback;
             hook = Native.SetWindowsHookEx(Native.WH_KEYBOARD_LL, hookProc, Native.GetModuleHandle(null), 0);
-            if (hook == IntPtr.Zero) ShowToast("warn", "Atalhos indisponíveis", "Não foi possível instalar o hook de teclado");
+            if (hook == IntPtr.Zero) ShowToast("warn", Loc.T("hotkeysUnavail"), Loc.T("hotkeysUnavailMsg"));
         };
         Win.Closed += delegate
         {
@@ -434,6 +528,7 @@ sealed class Controller
             if (d.TryGetValue("anykey", out v)) anyKey.IsChecked = v == "1";
             if (d.TryGetValue("start", out v)) startHk = Hotkey.Parse(v, startHk);
             if (d.TryGetValue("stop", out v)) stopHk = Hotkey.Parse(v, stopHk);
+            if (d.TryGetValue("lang", out v) && (v == "pt" || v == "en")) Loc.Lang = v;
         }
         catch (Exception) { }
     }
@@ -453,10 +548,45 @@ sealed class Controller
                 "double=" + (typeDouble.IsChecked == true ? "1" : "0"),
                 "anykey=" + (anyKey.IsChecked == true ? "1" : "0"),
                 "start=" + startHk.Serialize(),
-                "stop=" + stopHk.Serialize()
+                "stop=" + stopHk.Serialize(),
+                "lang=" + Loc.Lang
             });
         }
         catch (Exception) { }
+    }
+
+    // ---------- idioma ----------
+
+    void ApplyLanguage()
+    {
+        Find<Button>("MinBtn").ToolTip = Loc.T("minimize");
+        Find<Button>("CloseBtn").ToolTip = Loc.T("close");
+        langBtn.ToolTip = Loc.T("langTooltip");
+        langBtn.Content = Loc.Lang == "pt" ? "PT-BR" : "EN";
+        targetHead.Text = Loc.T("target");
+        clickHead.Text = Loc.T("click");
+        hotkeysHead.Text = Loc.T("hotkeys");
+        modeFixed.Content = Loc.T("modeFixed");
+        modeCursor.Content = Loc.T("modeCursor");
+        modeWindow.Content = Loc.T("modeWindow");
+        pickBtnText.Text = Loc.T("pickScreen");
+        pickWinBtnText.Text = Loc.T("pickScreen");
+        cursorNote.Text = Loc.T("cursorNote");
+        windowNote.Text = Loc.T("windowNote");
+        intervalLabel.Text = Loc.T("intervalLabel");
+        btnLeft.Content = Loc.T("left");
+        btnRight.Content = Loc.T("right");
+        btnMiddle.Content = Loc.T("middle");
+        typeSingle.Content = Loc.T("single");
+        typeDouble.Content = Loc.T("double");
+        startLabel.Text = Loc.T("start");
+        stopLabel.Text = Loc.T("stop");
+        startKeyBtn.ToolTip = Loc.T("hotkeyTip");
+        stopKeyBtn.ToolTip = Loc.T("hotkeyTip");
+        anyKeyText.Text = Loc.T("anyKey");
+        subText.Text = Loc.T("clicksRun");
+        UpdateRunningUi();
+        UpdateMode();
     }
 
     // ---------- UI state ----------
@@ -477,9 +607,9 @@ sealed class Controller
         bool win = m == ClickMode.Window;
         anyKey.IsEnabled = !win;
         anyKey.Opacity = win ? 0.45 : 1;
-        anyKeyNote.Text = win ? "Desligado no modo janela — o que você digita vai para os outros apps" : "Desligado = só o atalho de parar interrompe";
-        footerNote.Text = win ? "Seu mouse e seu teclado ficam livres enquanto ele clica em segundo plano."
-                              : "Mexer o mouse nunca interrompe — só o teclado interrompe.";
+        anyKeyNote.Text = win ? Loc.T("anyNoteWin") : Loc.T("anyNoteAny");
+        footerNote.Text = win ? Loc.T("footerWin")
+                              : Loc.T("footerOther");
         UpdateWindowLabel();
     }
 
@@ -487,7 +617,7 @@ sealed class Controller
     {
         bool ok = targetWin != IntPtr.Zero && Native.IsWindow(targetWin);
         if (!ok && targetWin != IntPtr.Zero) targetWin = IntPtr.Zero;
-        windowName.Text = ok ? Native.Describe(targetWin) : "Nenhuma janela escolhida";
+        windowName.Text = ok ? Native.Describe(targetWin) : Loc.T("noWindowYet");
         windowName.Foreground = ok ? (Brush)Win.FindResource("Fg") : Muted;
         windowPos.Text = ok ? "@ " + targetX + ", " + targetY : "";
         windowDot.Background = ok ? Green : Idle;
@@ -503,7 +633,7 @@ sealed class Controller
     void UpdateRunningUi()
     {
         bool on = run != null;
-        statusText.Text = on ? "CLICANDO" : "PRONTO";
+        statusText.Text = on ? Loc.T("clicking") : Loc.T("ready");
         statusText.Foreground = on ? Green : Muted;
         statusDot.Fill = on ? Green : Idle;
         if (on)
@@ -511,7 +641,7 @@ sealed class Controller
                 new DoubleAnimation(1, 0.25, TimeSpan.FromSeconds(0.55)) { AutoReverse = true, RepeatBehavior = RepeatBehavior.Forever });
         else
             statusDot.BeginAnimation(UIElement.OpacityProperty, null);
-        mainBtnText.Text = on ? "Parar" : "Iniciar";
+        mainBtnText.Text = on ? Loc.T("stop") : Loc.T("start");
         mainBtn.Background = (Brush)Win.FindResource(on ? "StopBrush" : "Accent");
         settingsPanel.IsEnabled = !on;
         settingsPanel.Opacity = on ? 0.5 : 1;
@@ -528,7 +658,7 @@ sealed class Controller
     {
         if (r == null) return;
         countText.Text = Interlocked.Read(ref r.Count).ToString("N0");
-        subText.Text = "cliques  ·  " + Elapsed(r);
+        subText.Text = Loc.T("clicksSep") + Elapsed(r);
     }
 
     // ---------- start / stop ----------
@@ -541,13 +671,13 @@ sealed class Controller
         var r = new ClickRun();
         if (!int.TryParse(intervalBox.Text.Trim(), out r.Interval) || r.Interval < 1)
         {
-            ShowToast("warn", "Intervalo inválido", "Digite um intervalo de 1 ms ou mais");
+            ShowToast("warn", Loc.T("invalidInterval"), Loc.T("invalidIntervalMsg"));
             return;
         }
         r.Mode = CurrentMode();
         if (r.Mode == ClickMode.Fixed && (!int.TryParse(xBox.Text.Trim(), out r.X) || !int.TryParse(yBox.Text.Trim(), out r.Y)))
         {
-            ShowToast("warn", "Nenhum local definido", "Use “Escolher na tela” para definir onde clicar");
+            ShowToast("warn", Loc.T("noTargetLoc"), Loc.T("noTargetLocMsg"));
             return;
         }
         if (r.Mode == ClickMode.Window)
@@ -555,12 +685,12 @@ sealed class Controller
             UpdateWindowLabel();
             if (targetWin == IntPtr.Zero)
             {
-                ShowToast("warn", "Nenhuma janela escolhida", "Use “Escolher na tela” para marcar um ponto dentro de uma janela");
+                ShowToast("warn", Loc.T("noWindowPick"), Loc.T("noWindowPickMsg"));
                 return;
             }
             if (Native.IsIconic(targetWin))
             {
-                ShowToast("warn", "Janela minimizada", "Restaure a janela de destino primeiro — ela pode estar atrás das outras");
+                ShowToast("warn", Loc.T("minimized"), Loc.T("minimizedMsg"));
                 return;
             }
             r.Root = targetWin; r.X = targetX; r.Y = targetY;
@@ -576,8 +706,8 @@ sealed class Controller
         UpdateRunningUi();
         SaveSettings();
         bool anyStops = r.Mode != ClickMode.Window && anyKey.IsChecked == true;
-        ShowToast("start", r.Mode == ClickMode.Window ? "Clicando em " + Native.Describe(r.Root) : "Clique iniciado",
-            "Pressione " + stopHk + (anyStops ? " ou qualquer tecla" : "") + " para parar");
+        ShowToast("start", r.Mode == ClickMode.Window ? Loc.T("clickingIn") + Native.Describe(r.Root) : Loc.T("started"),
+            Loc.T("press") + stopHk + (anyStops ? Loc.T("orAny") : "") + Loc.T("toStop"));
     }
 
     void Stop() { Stop(true); }
@@ -593,7 +723,7 @@ sealed class Controller
         ShowProgress(r);
         UpdateRunningUi();
         if (notify)
-            ShowToast("stop", "Cliques parados", Interlocked.Read(ref r.Count).ToString("N0") + " cliques em " + Elapsed(r));
+            ShowToast("stop", Loc.T("stopped"), Interlocked.Read(ref r.Count).ToString("N0") + Loc.T("clicksIn") + Elapsed(r));
     }
 
     // ---------- keyboard hook ----------
@@ -669,7 +799,7 @@ sealed class Controller
         if (recording != null) EndRecording(null);
         recording = b;
         b.Tag = "rec";
-        b.Content = "Pressione uma tecla…";
+        b.Content = Loc.T("pressAKey");
     }
 
     void EndRecording(Hotkey hk)
@@ -696,7 +826,7 @@ sealed class Controller
         var winLine = new TextBlock { FontSize = 12, Foreground = Frozen(0xB4, 0xBE, 0xFE), FontWeight = FontWeights.SemiBold,
                                       MaxWidth = 360, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 3, 0, 0),
                                       Visibility = pickWindow ? Visibility.Visible : Visibility.Collapsed };
-        var hint = new TextBlock { Text = pickWindow ? "Clique em um ponto dentro da janela para mirar  ·  Esc para cancelar" : "Clique para definir o alvo  ·  Esc para cancelar",
+        var hint = new TextBlock { Text = pickWindow ? Loc.T("pickWinHint") : Loc.T("pickPointHint"),
                                    FontSize = 11.5, Foreground = Muted, Margin = new Thickness(0, 2, 0, 0) };
         var sp = new StackPanel();
         sp.Children.Add(coord);
@@ -729,7 +859,7 @@ sealed class Controller
             if (pickWindow && overlay != IntPtr.Zero)
             {
                 hoverWin = Native.TopLevelAt(c, overlay);
-                winLine.Text = hoverWin == IntPtr.Zero ? "Nenhuma janela aqui" : Native.Describe(hoverWin);
+                winLine.Text = hoverWin == IntPtr.Zero ? Loc.T("noWindowHere") : Native.Describe(hoverWin);
             }
             label.UpdateLayout();
             double lx = p.X + 20, ly = p.Y + 20;
@@ -798,6 +928,7 @@ sealed class Controller
 
         Window t = Load<Window>("Toast.xaml");
         var root = (FrameworkElement)t.FindName("Root");
+        t.Title = Loc.T("toastTitle");
         ((TextBlock)t.FindName("TitleText")).Text = title;
         ((TextBlock)t.FindName("SubText")).Text = sub;
         var icon = (Border)t.FindName("IconBox");
@@ -865,7 +996,7 @@ sealed class Controller
     void TakeShots()
     {
         var steps = new Queue<Action>();
-        steps.Enqueue(delegate { Shot((FrameworkElement)Win.Content, Path.Combine(shotDir, "main.png")); ShowToast("start", "Clique iniciado", "Pressione F7 ou qualquer tecla para parar"); });
+        steps.Enqueue(delegate { Shot((FrameworkElement)Win.Content, Path.Combine(shotDir, "main.png")); ShowToast("start", Loc.T("started"), Loc.T("f7Demo")); });
         steps.Enqueue(delegate { Shot(toastRoot, Path.Combine(shotDir, "toast.png")); });
         steps.Enqueue(delegate
         {

@@ -1,4 +1,4 @@
-# WinClicker 🎨🇧🇷
+﻿# WinClicker 🎨🇧🇷
 
 **Auto clicker gratuito e de código aberto para Windows 10 e 11** — fork do [WinClicker](https://github.com/PriyanshuGeTRekT/WinClicker) com tema **[Catppuccin Mocha](https://catppuccin.com)** e interface em **português (pt-BR)**.
 
@@ -15,6 +15,7 @@ Um único `.exe` de ~60 KB: sem instalador, sem anúncios, sem dependências. E,
 - **Intervalo ajustável** a partir de 1 ms, com uma thread de tempo dedicada — milhares de cliques por minuto se você quiser.
 - **Botão esquerdo, direito ou do meio; clique simples ou duplo.**
 - **Notificações de início/parada** com a contagem de cliques e o tempo de execução.
+- **Seletor de idioma inglês / pt-BR** — abre em inglês por padrão; o botão na barra de título alterna a interface na hora e a escolha fica salva.
 - **Tema Catppuccin Mocha** — janela sem bordas, cantos arredondados, ciente de DPI em cada monitor.
 - **Portátil e minúsculo.** Um `.exe`, sem instalador, sem runtime para baixar. As configurações ficam em `%APPDATA%\WinClicker\settings.ini`.
 - **Código aberto (MIT)** — o app inteiro é um arquivo C# e dois XAML.

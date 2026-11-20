@@ -212,6 +212,7 @@
             <TextBlock Text="WinClicker" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
           </StackPanel>
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button x:Name="LangBtn" Style="{StaticResource TitleBtn}" FontSize="9.5" FontWeight="SemiBold" Width="38" Content="PT-BR" ToolTip="Mudar idioma"/>
             <Button x:Name="MinBtn" Style="{StaticResource TitleBtn}" ToolTip="Minimizar">
               <Path Data="M0,0 H10" Stroke="#A6ADC8" StrokeThickness="1.4"/>
             </Button>
@@ -248,7 +249,7 @@
 
         <StackPanel x:Name="SettingsPanel">
           <!-- target -->
-          <TextBlock Text="ALVO" Style="{StaticResource Head}"/>
+          <TextBlock x:Name="TargetHead" Text="ALVO" Style="{StaticResource Head}"/>
           <Border Style="{StaticResource Card}">
             <StackPanel>
               <Border Style="{StaticResource SegBox}">
@@ -277,7 +278,7 @@
                         <Ellipse Stroke="#B4BEFE" StrokeThickness="1.4" Margin="2.5"/>
                         <Path Data="M7,0 V4 M7,10 V14 M0,7 H4 M10,7 H14" Stroke="#B4BEFE" StrokeThickness="1.4"/>
                       </Grid>
-                      <TextBlock Text="Escolher na tela" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                      <TextBlock x:Name="PickBtnText" Text="Escolher na tela" Margin="8,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                   </Button>
                 </Grid>
@@ -303,11 +304,11 @@
                           <Ellipse Stroke="#B4BEFE" StrokeThickness="1.4" Margin="2.5"/>
                           <Path Data="M7,0 V4 M7,10 V14 M0,7 H4 M10,7 H14" Stroke="#B4BEFE" StrokeThickness="1.4"/>
                         </Grid>
-                        <TextBlock Text="Escolher na tela" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PickWinBtnText" Text="Escolher na tela" Margin="8,0,0,0" VerticalAlignment="Center"/>
                       </StackPanel>
                     </Button>
                   </Grid>
-                  <TextBlock Foreground="#6C7086" FontSize="11.5" Margin="2,8,0,0" TextWrapping="Wrap"
+                  <TextBlock x:Name="WindowNote" Foreground="#6C7086" FontSize="11.5" Margin="2,8,0,0" TextWrapping="Wrap"
                              Text="Os cliques são enviados direto para essa janela, então o seu mouse fica livre e você pode usar outros aplicativos enquanto isso. A janela pode ficar atrás das outras, mas não pode ser minimizada. Neste modo, apenas o atalho de parar interrompe."/>
                 </StackPanel>
               </Grid>
@@ -315,7 +316,7 @@
           </Border>
 
           <!-- click -->
-          <TextBlock Text="CLIQUE" Style="{StaticResource Head}"/>
+          <TextBlock x:Name="ClickHead" Text="CLIQUE" Style="{StaticResource Head}"/>
           <Border Style="{StaticResource Card}">
             <StackPanel>
               <Grid>
@@ -324,7 +325,7 @@
                   <ColumnDefinition Width="96"/>
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Intervalo entre cliques" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                <TextBlock x:Name="IntervalLabel" Text="Intervalo entre cliques" VerticalAlignment="Center" Margin="2,0,0,0"/>
                 <TextBox x:Name="IntervalBox" Grid.Column="1" Style="{StaticResource Input}" Text="100" TextAlignment="Right"/>
                 <TextBlock Text="ms" Grid.Column="2" Style="{StaticResource Muted}" Margin="8,0,2,0"/>
               </Grid>
@@ -352,7 +353,7 @@
           </Border>
 
           <!-- hotkeys -->
-          <TextBlock Text="ATALHOS" Style="{StaticResource Head}"/>
+          <TextBlock x:Name="HotkeysHead" Text="ATALHOS" Style="{StaticResource Head}"/>
           <Border Style="{StaticResource Card}">
             <StackPanel>
               <Grid>
@@ -362,14 +363,14 @@
                   <ColumnDefinition Width="Auto"/>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Iniciar" Style="{StaticResource Muted}" Margin="2,0,10,0"/>
+                <TextBlock x:Name="StartLabel" Text="Iniciar" Style="{StaticResource Muted}" Margin="2,0,10,0"/>
                 <Button x:Name="StartKeyBtn" Grid.Column="1" Style="{StaticResource Ghost}" Content="F6" ToolTip="Clique e depois pressione o novo atalho"/>
-                <TextBlock Text="Parar" Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,10,0"/>
+                <TextBlock x:Name="StopLabel" Text="Parar" Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,10,0"/>
                 <Button x:Name="StopKeyBtn" Grid.Column="3" Style="{StaticResource Ghost}" Content="F7" ToolTip="Clique e depois pressione o novo atalho"/>
               </Grid>
               <CheckBox x:Name="AnyKey" Style="{StaticResource Switch}" Margin="2,12,2,0" IsChecked="True">
                 <StackPanel>
-                  <TextBlock Text="Parar com qualquer tecla"/>
+                  <TextBlock x:Name="AnyKeyText" Text="Parar com qualquer tecla"/>
                   <TextBlock x:Name="AnyKeyNote" Text="Desligado = só o atalho de parar interrompe" Foreground="#A6ADC8" FontSize="11.5"/>
                 </StackPanel>
               </CheckBox>
